@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<style>
+    div {
+        margin-bottom: 10px;
+    }
+    label {
+        display: inline-block;
+        width: 150px;
+        text-align: right;
+    }
+    .topnav {
+        overflow: hidden;
+        background-color: #333;
+    }
+
+    .topnav a {
+        float: left;
+        color: #f2f2f2;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 17px;
+    }
+
+    .topnav a:hover {
+        background-color: #ddd;
+        color: black;
+    }
+
+    .topnav a.active {
+        background-color: #2fa7cc;
+        color: white;
+    }
+</style>
+<head>
+    <meta charset="UTF-8">
+    <title>Добавление вопроса(утверждения)</title>
+</head>
+<body style="background-color:powderblue;">
+<div class="topnav" >
+    <a href="/questions-home">Список вопросов</a>
+    <a href="/login?logout">Выход</a>
+
+</div>
+<main>
+    <h1>Добавить вопрос</h1>
+    <form th:object="${formDataQuestion}"
+          th:action="@{/create-question}"
+          method="post"
+          style="margin-left: 35%; margin-top: 10%;">
+        <div style="color: red" th:if="${error != null}" th:text="${error}"></div>
+        <div>
+            <label for="questionNumber" class="sr-only">Номер вопроса</label>
+            <input id="questionNumber" type="text" required autofocus
+                   th:field="*{questionNumber}" >
+
+        </div>
+
+
+        <div>
+            <label for="question" class="sr-only">Вопрос</label>
+            <textarea id="question" name="question"
+                   th:field="*{question}">
+            </textarea>
+
+        </div>
+
+
+        <div>
+
+                    <label for="tests" class="sr-only">ID теста</label>
+                    <input type="hidden" list="tests"/>
+                    <select th:field="*{testId}" id="tests">
+                        <option value="">--Выберите тест--</option>
+                        <option th:each="test: ${tests}"
+                                th:value="${test.id}" th:text="|${test.id} - ${test.testName} |"/>
+                        </option>
+                    </select>
+        </div>
+
+        <div>
+            <label for="questionValue" class="sr-only">Вес вопроса</label>
+            <input id="questionValue" type="text" required autofocus
+                   th:field="*{questionValue}" >
+
+        </div>
+
+
+        <button type="submit">Добавить вопрос(утверждение)</button>
+    </form>
+
+</main>
+<div th:insert="footer.html :: footer"></div>
+</body>
+</html>

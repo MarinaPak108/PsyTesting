@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<style>
+    div {
+        margin-bottom: 10px;
+    }
+    label {
+        display: inline-block;
+        width: 150px;
+        text-align: right;
+    }
+    .topnav {
+        overflow: hidden;
+        background-color: #333;
+    }
+
+    .topnav a {
+        float: left;
+        color: #f2f2f2;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 17px;
+    }
+
+    .topnav a:hover {
+        background-color: #ddd;
+        color: black;
+    }
+
+    .topnav a.active {
+        background-color: #2fa7cc;
+        color: white;
+    }
+</style>
+<head>
+    <meta charset="UTF-8">
+    <title>Create Professor</title>
+</head>
+<body style="background-color:powderblue;">
+<div class="topnav" >
+    <a href="/home/admin/assignT">Назначение куратора</a>
+    <a href="/home/admin">Домашняя страница администрирования</a>
+    <a href="/login?logout">Выход</a>
+</div>
+<main>
+    <h1>Добавить преподавателя</h1>
+    <form th:object="${formDataT}"
+          th:action="@{/home/admin/createT}"
+          method="post"
+          style="margin-left: 35%; margin-top: 10%;">
+        <div style="color: red" th:if="${error != null}" th:text="${error}"></div>
+        <div>
+            <label for="login" class="sr-only">Логин</label>
+            <input id="login" type="text" required autofocus
+                   th:field="*{login}" >
+            <p th:if="${#fields.hasErrors('login')}"
+               th:text="${#strings.listJoin(#fields.errors('login'), ', ')}"></p>
+        </div>
+        <div>
+            <label for="password" class="sr-only">Пароль</label>
+            <input id="password" type="password" required
+                   th:field="*{password}">
+            <p th:if="${#fields.hasErrors('password')}"
+               th:text="${#strings.listJoin(#fields.errors('password'), ', ')}"></p>
+        </div>
+        <div>
+            <label for="name" class="sr-only">Имя</label>
+            <input id="name" type="text" required
+                   th:field="*{name}">
+            <p th:if="${#fields.hasErrors('name')}"
+               th:text="${#strings.listJoin(#fields.errors('name'), ', ')}"></p>
+        </div>
+        <div>
+            <label for="surname" class="sr-only">Фамилия</label>
+            <input id="surname" type="text" required
+                   th:field="*{surname}">
+            <p th:if="${#fields.hasErrors('surname')}"
+               th:text="${#strings.listJoin(#fields.errors('surname'), ', ')}"></p>
+        </div>
+        <div>
+            <label for="fathersname" class="sr-only">Отчество</label>
+            <input id="fathersname" type="text" required
+                   th:field="*{fathersName}">
+            <p th:if="${#fields.hasErrors('fathersName')}"
+               th:text="${#strings.listJoin(#fields.errors('fathersName'), ', ')}"></p>
+        </div>
+        <div>
+            <label for="isCurator" class="sr-only">Кураторство</label>
+            <input id ="isCurator" type="checkbox" th:field="*{curator}" checked/>
+        </div>
+        <button type="submit">Добавить преподавателя</button>
+    </form>
+
+</main>
+<div th:insert="footer.html :: footer"></div>
+</body>
+</html>

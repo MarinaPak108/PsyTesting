@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<style>
+    div {
+        margin-bottom: 10px;
+    }
+    label {
+        display: inline-block;
+        width: 150px;
+        text-align: right;
+    }
+</style>
+<head>
+    <meta charset="UTF-8">
+    <title>Стартовая страница</title>
+</head>
+<body style="background-color:powderblue;">
+
+<main>
+    <h1>Добро пожаловать на сайт психодиагностики. Познай себя глубже</h1>
+        <form method="post"
+              style="margin-left: 35%; margin-top: 10%;"
+              th:action="@{/login}" th:object="${formData}">
+            <div style="color: red" th:if="${error != null}" th:text="${error}"></div>
+            <div>
+                <label for="username" class="sr-only">Логин</label>
+                <input id="username" name="username" type="text" required autofocus
+                       th:field="*{username}" >
+                <p th:if="${#fields.hasErrors('username')}"
+                   th:text="${#strings.listJoin(#fields.errors('username'), ', ')}"></p>
+            </div>
+            <div>
+                <label for="password" class="sr-only">Пароль</label>
+                <input id="password" name="password" type="password" required
+                       th:field="*{password}">
+                <p th:if="${#fields.hasErrors('password')}"
+                   th:text="${#strings.listJoin(#fields.errors('password'), ', ')}"></p>
+            </div>
+            <button type="submit">Войти</button>
+            <a href="/create">Зарегистрироваться</a>
+        </form>
+</main>
+
+<div th:insert="footer.html :: footer"></div>
+</body>
+</html>

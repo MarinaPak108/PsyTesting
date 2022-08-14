@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Teacher Page</title>
+    <style type="text/css">
+        .tg  {border-collapse:collapse;border-spacing:0;}
+        .tg td{border-color: transparent;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+            overflow:hidden;padding:10px 5px;word-break:normal;}
+        .tg th{border-color:transparent;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+            font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+        .tg .tg-0lax{text-align:left;vertical-align:top}
+        .tg-sort-header::-moz-selection{background:0 0}
+        .tg-sort-header::selection{background:0 0}.tg-sort-header{cursor:pointer}
+        .tg-sort-header:after{content:'';float:right;margin-top:7px;border-width:0 5px 5px;border-style:solid;
+            border-color:#404040 transparent;visibility:hidden}
+        .tg-sort-header:hover:after{visibility:visible}
+        .tg-sort-asc:after,.tg-sort-asc:hover:after,.tg-sort-desc:after{visibility:visible;opacity:.4}
+        .tg-sort-desc:after{border-bottom:none;border-width:5px 5px 0}
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .topnav {
+            overflow: hidden;
+            background-color: #333;
+        }
+
+        .topnav a {
+            float: left;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+
+        .topnav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .topnav a.active {
+            background-color: #2fa7cc;
+            color: white;
+        }
+        table, th, td {
+            border-style: none;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 5px;
+        }
+        th {
+            text-align: left;
+        }
+    </style>
+
+</head>
+<body style="background-color:powderblue;">
+<div class="topnav" >
+    <a href="/home">Домашняя страница</a>
+    <a href="/test">Обновить тест</a>
+    <a href="/login?logout">Выход</a>
+</div>
+<!-- Main Container Start -->
+<div class="main-container container py-5 px-4">
+    <div class="card bg-dark text-light py-5 px-4 mx-auto">
+
+        <h2>ЛИЧНЫЙ КАБИНЕТ ПРЕПОДАВАТЕЛЯ</h2>
+        <p>персональные данные</p>
+        <table class="tg">
+            <tr>
+                <th>...</th>
+                <th>...</th>
+            </tr>
+            <tr>
+                <td>ID преподавателя:</td>
+                <td><p th:text="${teacher.id}" th:remove="tag"></p></td>
+            </tr>
+            <tr>
+                <td>Логин преподавателя:</td>
+                <td><p  th:text="${teacher.login}" th:remove="tag"></p></td>
+            </tr>
+            <tr>
+                <td>Имя преподавателя:</td>
+                <td><p  th:text="${teacher.name}" th:remove="tag"></p></td>
+            </tr>
+            <tr>
+                <td>Фамилия преподавателя:</td>
+                <td><p  th:text="${teacher.surname}" th:remove="tag"></p></td>
+            </tr>
+            <tr>
+                <td>Отчество преподавателя:</td>
+                <td><p  th:text="${teacher.fathersName}" th:remove="tag"></p></td>
+            </tr>
+        </table>
+        <p>персональные данные студента</p>
+        <table class="tg">
+            <th:block>
+                <thead>
+                <tr>
+                    <th>ID студента</th>
+                    <th>Имя студента</th>
+                    <th>Фамилия студента</th>
+                    <th>Отчество студента</th>
+                </tr>
+                <tr th:each="user : ${teacher.users}">
+                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.name}"></td>
+                    <td th:text="${user.surname}"></td>
+                    <td th:text="${user.fathersName}"></td>
+                </tr>
+                </thead>
+            </th:block>
+        </table>
+    </div>
+    <div class="card bg-dark text-light py-5 px-4 mx-auto">
+</div>
+</div>
+</div>
+</body>
+
+<div th:insert="footer.html :: footer"></div>
+</html>

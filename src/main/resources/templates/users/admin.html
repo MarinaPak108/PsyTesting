@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<style>
+    table.timecard {
+        margin: auto;
+        width: 600px;
+        border-collapse: collapse;
+        border: 1px solid #fff; /*for older IE*/
+        border-style: hidden;
+    }
+
+    table.timecard caption {
+        background-color: #f79646;
+        color: #fff;
+        font-size: x-large;
+        font-weight: bold;
+        letter-spacing: .3em;
+    }
+
+    table.timecard thead th {
+        padding: 8px;
+        background-color: #fde9d9;
+        font-size: large;
+    }
+
+    table.timecard thead th#thDay {
+        width: 40%;
+    }
+
+    table.timecard thead th#thRegular, table.timecard thead th#thOvertime, table.timecard thead th#thTotal {
+        width: 20%;
+    }
+
+    table.timecard th, table.timecard td {
+        padding: 3px;
+        border-width: 1px;
+        border-style: solid;
+        border-color: #f79646 #ccc;
+    }
+
+    table.timecard td {
+        text-align: right;
+    }
+
+    table.timecard tbody th {
+        text-align: left;
+        font-weight: normal;
+    }
+
+    table.timecard tfoot {
+        font-weight: bold;
+        font-size: large;
+        background-color: #687886;
+        color: #fff;
+    }
+
+    table.timecard tr.even {
+        background-color: #fde9d9;
+    }
+    .topnav {
+        overflow: hidden;
+        background-color: #333;
+    }
+
+    .topnav a {
+        float: left;
+        color: #f2f2f2;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 17px;
+    }
+
+    .topnav a:hover {
+        background-color: #ddd;
+        color: black;
+    }
+
+    .topnav a.active {
+        background-color: #2fa7cc;
+        color: white;
+    }
+</style>
+<head>
+    <meta charset="UTF-8">
+    <title>Домашняя страница администрирования</title>
+
+    <link href="css/listbox.css" rel="stylesheet">
+    <script src="js/listbox.js" type="text/javascript"></script>
+    <script src="js/list box-scrollable.js" type="text/javascript"></script>
+</head>
+<body style="background-color:powderblue;">
+<div class="topnav" >
+    <a href="/home/admin/assignT">Назначение куратора</a>
+    <a href="/home/admin/createT">Добавить преподавателя</a>
+    <a href="/login?logout">Выход</a>
+</div>
+<main>
+    <h1>Админ</h1>
+    <div class="listbox-area">
+        <div>
+    <span id="ss_elem" class="listbox-label" style="font-size: large">
+      Преподаватели:
+    </span>
+        <table class="timecard">
+            <tr>
+                <th id="thDay">ID преподавателя</th>
+                <th id="thRegular">Имя преподавателя</th>
+                <th id="thOvertime">Фамилия преподавателя</th>
+                <th id="thTotal">Кураторство</th>
+            </tr>
+            <tbody>
+            <tr th:each="teacher: ${teachers}">
+                <td th:text="${teacher.id}"></td>
+                <td th:text="${teacher.name}"></td>
+                <td th:text="${teacher.surname}"></td>
+                <td th:text="${teacher.isCurator}"></td>
+                <td> <a th:href="@{/home/admin/showFormForUpdate/{id}(id=${teacher.id})}"
+                        class="btn btn-primary">Обновить</a>
+                    <a th:href="@{/home/admin/deleteTeacher/{id}(id=${teacher.id})}"
+                       class="btn btn-danger">Удалить</a>
+            </tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+    <div class="listbox-area">
+        <div>
+<span id="ss_elem" class="listbox-label" style="font-size: large">
+  Студенты:
+</span>
+
+            <table class="timecard">
+                <tr>
+                    <th id="thDay">ID студента</th>
+                    <th id="thRegular">Имя студента</th>
+                    <th id="thOvertime">Фамилия студента</th>
+                    <th id="thTotal">Куратор</th>
+                </tr>
+                <tbody>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.name}"></td>
+                    <td th:text="${user.birthday}"></td>
+                    <td th:text="${user.teacher.fathersName}"></td>
+                    <td> <a th:href="@{/home/admin/showFormForUpdateUser/{id}(id=${user.id})}"
+                            class="btn btn-primary">Обновить</a>
+                        <a th:href="@{/home/admin/deleteUser/{id}(id=${user.id})}"
+                           class="btn btn-danger">Удалить</a>
+                </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+
+</main>
+<div th:insert="footer.html :: footer"></div>
+</body>
+</html>

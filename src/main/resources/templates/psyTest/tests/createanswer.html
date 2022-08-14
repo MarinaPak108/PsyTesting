@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<style>
+    div {
+        margin-bottom: 10px;
+    }
+    label {
+        display: inline-block;
+        width: 150px;
+        text-align: right;
+    }
+    .topnav {
+        overflow: hidden;
+        background-color: #333;
+    }
+
+    .topnav a {
+        float: left;
+        color: #f2f2f2;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 17px;
+    }
+
+    .topnav a:hover {
+        background-color: #ddd;
+        color: black;
+    }
+
+    .topnav a.active {
+        background-color: #2fa7cc;
+        color: white;
+    }
+</style>
+<head>
+    <meta charset="UTF-8">
+    <title>Добавление ответа</title>
+</head>
+<body style="background-color:powderblue;">
+<div class="topnav" >
+    <a href="/answers-home">Список ответов</a>
+    <a href="/login?logout">Выход</a>
+
+</div>
+<main>
+    <h1>Добавить ответ</h1>
+    <form th:object="${formDataAnswer}"
+          th:action="@{/create-answer}"
+          method="post"
+          style="margin-left: 35%; margin-top: 10%;">
+        <div style="color: red" th:if="${error != null}" th:text="${error}"></div>
+        <div>
+            <label for="answer" class="sr-only">Ответ</label>
+            <textarea id="answer" type="text" required autofocus
+                   th:field="*{answer}" >
+            </textarea>
+        </div>
+
+
+        <div>
+            <label for="answerValue" class="sr-only">Вес ответа</label>
+            <input id="answerValue" name="answerValue"
+                   th:field="*{answerValue}">
+
+        </div>
+
+
+        <div>
+
+                    <label for="questions" class="sr-only">ID вопроса</label>
+                    <input type="hidden" list="questions"/>
+                    <select th:field="*{questionId}" id="questions">
+                        <option value="">--Выберите вопрос--</option>
+                        <option th:each="question: ${questions}"
+                                th:value="${question.id}" th:text="|${question.id} - ${question.question} |"/>
+                        </option>
+                    </select>
+        </div>
+
+
+        <button type="submit">Добавить ответ</button>
+    </form>
+
+</main>
+<div th:insert="footer.html :: footer"></div>
+</body>
+</html>

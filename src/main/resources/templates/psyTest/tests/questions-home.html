@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<style>
+  table.timecard {
+    margin: auto;
+    width: 600px;
+    border-collapse: collapse;
+    border: 1px solid #fff; /*for older IE*/
+    border-style: hidden;
+  }
+
+  table.timecard caption {
+    background-color: #f79646;
+    color: #fff;
+    font-size: x-large;
+    font-weight: bold;
+    letter-spacing: .3em;
+  }
+
+  table.timecard thead th {
+    padding: 8px;
+    background-color: #fde9d9;
+    font-size: large;
+  }
+
+  table.timecard thead th#thDay {
+    width: 40%;
+  }
+
+  table.timecard thead th#thRegular, table.timecard thead th#thOvertime, table.timecard thead th#thTotal {
+    width: 20%;
+  }
+
+  table.timecard th, table.timecard td {
+    padding: 3px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #f79646 #ccc;
+  }
+
+  table.timecard td {
+    text-align: right;
+  }
+
+  table.timecard tbody th {
+    text-align: left;
+    font-weight: normal;
+  }
+
+  table.timecard tfoot {
+    font-weight: bold;
+    font-size: large;
+    background-color: #687886;
+    color: #fff;
+  }
+
+  table.timecard tr.even {
+    background-color: #fde9d9;
+  }
+  .topnav {
+    overflow: hidden;
+    background-color: #333;
+  }
+
+  .topnav a {
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+  }
+
+  .topnav a:hover {
+    background-color: #ddd;
+    color: black;
+  }
+
+  .topnav a.active {
+    background-color: #2fa7cc;
+    color: white;
+  }
+</style>
+<head>
+  <meta charset="UTF-8">
+  <title>Вопросы(утверждения)</title>
+
+  <link href="css/listbox.css" rel="stylesheet">
+</head>
+<body style="background-color:powderblue;">
+<div class="topnav" >
+  <a href="/create-question">Добавление вопроса(утверждения)</a>
+  <a href="/login?logout">Выход</a>
+
+</div>
+<main>
+  <h1>Список вопросов</h1>
+  <div class="listbox-area">
+    <div>
+    <span id="ss_elem" class="listbox-label" style="font-size: large">
+      Вопросы:
+    </span>
+      <table class="time-card">
+        <tr>
+          <th>ID вопроса</th>
+          <th>Номер вопроса</th>
+          <th>Вопрос(утверждение)</th>
+          <th>ID теста</th>
+          <th>Вес вопроса</th>
+        </tr>
+        <tbody>
+        <tr th:each="question: ${questions}">
+          <td th:text="${question.id}"></td>
+          <td th:text="${question.questionNumber}"></td>
+          <td th:text="${question.question}"></td>
+          <td th:text="${question.test.id}"></td>
+          <td th:text="${question.questionValue}"></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+</main>
+<div th:insert="footer.html :: footer"></div>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<style>
+    div {
+        margin-bottom: 10px;
+    }
+    label {
+        display: inline-block;
+        width: 150px;
+        text-align: right;
+    }
+    .topnav {
+        overflow: hidden;
+        background-color: #333;
+    }
+
+    .topnav a {
+        float: left;
+        color: #f2f2f2;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 17px;
+    }
+
+    .topnav a:hover {
+        background-color: #ddd;
+        color: black;
+    }
+
+    .topnav a.active {
+        background-color: #2fa7cc;
+        color: white;
+    }
+</style>
+<head>
+    <meta charset="UTF-8">
+    <title>Добавить тест</title>
+</head>
+<body style="background-color:powderblue;">
+<div class="topnav" >
+    <a href="/tests-home">Список тестов</a>
+    <a href="/login?logout">Выход</a>
+
+</div>
+<main>
+    <h1>Добавить тест</h1>
+    <form th:object="${formDataTest}"
+          th:action="@{/create-test}"
+          method="post"
+          style="margin-left: 35%; margin-top: 10%;">
+        <div style="color: red" th:if="${error != null}" th:text="${error}"></div>
+        <div>
+            <label for="testName" class="sr-only">Название теста</label>
+            <input id="testName" type="text" required autofocus
+                   th:field="*{testName}" >
+
+        </div>
+
+        <div>
+            <label for="description" class="sr-only">Описание</label>
+            <textarea id="description" name="description"
+                   th:field="*{description}">
+            </textarea>
+
+        </div>
+
+        <div>
+            <label for="categoryCount" class="sr-only">Количество шкал</label>
+            <input id="categoryCount" type="text" required autofocus
+                   th:field="*{categoryCount}" >
+
+        </div>
+
+        <button type="submit">Добавить тест</button>
+    </form>
+
+</main>
+<div th:insert="footer.html :: footer"></div>
+</body>
+</html>
