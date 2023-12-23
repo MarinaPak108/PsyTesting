@@ -13,6 +13,8 @@ public interface TestRepository extends JpaRepository<TestEntity, Long> {
 
     TestEntity getTestById(Long id);
 
+    Long countByDescriptionIsNotNull();
+
     Optional<TestEntity> getTestByTestName(String testName);
 
 }

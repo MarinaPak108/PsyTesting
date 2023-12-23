@@ -142,7 +142,17 @@ public class TestService {
     }
 
     public List<TestEntity> getTests() {
-        return repository.findAll();
+        List<TestEntity> tests = new ArrayList<>();
+        Long records = repository.countByDescriptionIsNotNull();
+        if (records>1){
+            tests = repository.findAll();
+        }
+        else{
+            TestEntity test= repository.getTestById(1l);
+            tests.add(test);
+        }
+        logger.info("found test number is" + tests.size());
+        return tests;
     }
 
     public List<QuestionEntity> getQuestions() {
