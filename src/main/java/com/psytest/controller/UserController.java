@@ -28,7 +28,7 @@ public class UserController {
         this.service = service;
     }
 
-    @RequestMapping("/login")
+    @GetMapping("/login")
     public String showLoginUserForm(Model model) {
         model.addAttribute("formData", new CreateUserLoginFormData());
         return "users/login";
@@ -69,7 +69,7 @@ public class UserController {
         return result;
     }
 
-    @RequestMapping("/errorlogin")
+    @GetMapping("/errorlogin")
     public String errorLogin(Model model){
         model.addAttribute("errorLogin", "login failed. please check again or sign in");
         model.addAttribute("formData", new CreateUserLoginFormData());
