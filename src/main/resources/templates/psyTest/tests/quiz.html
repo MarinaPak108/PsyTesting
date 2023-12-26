@@ -54,38 +54,48 @@
         <div class="ques-box bg-dark text-light" th:each="ques, i: ${qForm.questions}">
             <p class="title" th:text="${ques.questionNumber}+'. '+${ques.question}"></p>
             <div style="color: red" th:if="${error != null}" th:text="${error}"></div>
-
             <div class="option">
+                <span>
                 <input type="radio"  id = "1" th:name="|questions[${i.index}].choose|" th:value="0" />
                 <label for = "1" >в очень малой степени</label>
+                </span>
             </div>
-
             <div class="option">
+                <span>
                 <input type="radio" id = "2"  th:name="|questions[${i.index}].choose|" th:value="1" />
                 <label for = "2">в малой степени</label>
+                </span>
             </div>
 
             <div class="option">
+                <span>
                 <input type="radio" id = "3" th:name="|questions[${i.index}].choose|" th:value="2" />
                 <label for = "3">в средней степени</label>
+                    </span>
             </div>
 
             <div class="option">
+                <span>
                 <input type="radio" id = "4" th:name="|questions[${i.index}].choose|" th:value="3" />
                 <label for = "4">в большой степени</label>
+                </span>
             </div>
 
             <div class="option">
+                <span>
                 <input type="radio" id = "5" th:name="|questions[${i.index}].choose|" th:value="4" />
                 <label for = "5">в очень большой степени</label>
+                </span>
             </div>
+
             <input type="hidden" th:name="|questions[${i.index}].id|" th:value="${ques.id}" />
             <input type="hidden" th:name="|questions[${i.index}].questionValue|" th:value="${ques.questionValue}" />
             <input type="hidden" th:name="|questions[${i.index}].questionNumber|" th:value="${ques.questionNumber}" />
         </div>
 
+
         <button th:disabled=true id="SubmitBtn" type="submit"  class="btn btn-danger d-block mx-auto mt-4">Завершить тест</button>
-        <button onclick="f1()" id="toggle-something" type="button">Show Selected Value</button>
+        <button onclick="f1()" id="toggle-something" type="button">Проверка на выбранные ответы</button>
     </form>
 </div>
 <script>

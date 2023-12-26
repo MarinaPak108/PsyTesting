@@ -37,6 +37,7 @@
                 <p th:if="${#fields.hasErrors('password')}"
                    th:text="${#strings.listJoin(#fields.errors('password'), ', ')}"></p>
             </div>
+            <div style="color: red" th:if="${errorLogin != null}" th:text="${errorLogin}"></div>
             <button type="submit">Войти</button>
             <a href="/create">Зарегистрироваться</a>
         </form>

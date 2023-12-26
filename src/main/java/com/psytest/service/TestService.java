@@ -175,8 +175,7 @@ public class TestService {
 
     public QuestionForm getQuestions(Long testId) {
         Optional<TestEntity> test = repository.findById(testId);
-        List<QuestionEntity> allQues = questionRepository.getQuestionEntityByTest(test);
-        ;
+        List<QuestionEntity> allQues = questionRepository.getQuestionEntitiesByTestAndIsShow(test, 1);
         qForm.setQuestions(allQues);
         return qForm;
     }
@@ -215,11 +214,14 @@ public class TestService {
 
     public ArrayList<Double> getResult(QuestionForm qForm, long testResult) {
         TestResultEntity testR = testResultRepo.getById(testResult);
+        int uiSize = qForm.getQuestions().size();
         TestEntity test = testR.getTest();
         long testId = test.getId();
         ArrayList<Double> resultArray =  new ArrayList<>(Collections.nCopies(test.getCategoryCount(), -1.0));
+        qForm = addAdditionalQuestions(qForm, testId);
         for (QuestionEntity q : qForm.getQuestions()) {
-            List<AnswerEntity> answers = answerRepository.findAnswerEntityByQuestion(q);
+            QuestionEntity ques = questionRepository.getQuestionEntityByQuestionNumberAndIsShow(q.getQuestionNumber(), 1);
+            List<AnswerEntity> answers = answerRepository.findAnswerEntityByQuestion(ques);
             AnswerEntity answer = answers.get(q.getChoose());
             if (resultArray.get(q.getQuestionValue()) == -1.0) {
                 resultArray.set(q.getQuestionValue(), Double.valueOf(answer.getAnswerValue()));
@@ -232,12 +234,14 @@ public class TestService {
         for (int i = 0; i < test.getCategoryCount(); i++) {
             int qtyQ = questionRepository.countQuestionEntitiesByTestIdAndQuestionValue(testId, i);
             Double arrayResult = Double.valueOf(resultArray.get(i));
-            Double result = arrayResult /qtyQ;
-            resultArray.set(i, result);
-
+            if(arrayResult != -1.0){
+                Double result = arrayResult /qtyQ;
+                resultArray.set(i, result);
+            }
         }
+        QuestionEntity quesSize = questionRepository.getFirstByTestAndIsShow(test, 0);
         // add 13th element with total srednearifmeticheskoe:
-        List <Double> doubleResult = getNewListOfDouble(resultArray);
+        List <Double> doubleResult = getNewListOfDouble(resultArray,quesSize.getQuestionValue());
         //convert ListString to String
         String stringResult = listToStringConverter(doubleResult);
         // set to test Result
@@ -251,6 +255,19 @@ public class TestService {
         testResultRepo.save(testR);
 
         return resultArray;
+    }
+
+    public QuestionForm addAdditionalQuestions(QuestionForm qForm, Long testId){
+        Optional<TestEntity> test = repository.findById(testId);
+        List<QuestionEntity> questions = questionRepository.getQuestionEntitiesByTestAndIsShow(test, 0);
+        List<QuestionEntity> questionsUI = qForm.getQuestions();
+        for(QuestionEntity q : questions){
+            QuestionEntity commonQ = questionsUI.get(q.getQuestionNumber()-1);
+            q.setChoose(commonQ.getChoose());
+            questionsUI.add(q);
+        }
+        //qForm.setQuestions(questionsUI);
+        return qForm;
     }
 
 
@@ -276,12 +293,59 @@ public class TestService {
         return convertedStringList;
     }
 
+    public ArrayList<String> countResults (List<Double> resultsList, long testResult){
+        TestResultEntity testR = testResultRepo.getById(testResult);
+        TestEntity test = testR.getTest();
+        ArrayList<String> showResults = new ArrayList<>(Collections.nCopies(test.getCategoryCount(), null));
+        for (int i = 0; i <= test.getCategoryCount(); i++) {
+            if (i == 0){
+                if (resultsList.get(i)>=4){
+                    showResults = new ArrayList<>(Collections.nCopies(1, null));
+                    showResults.set(i, "results are not valid. please try again");
+                    return showResults;
+                }
+
+                else{showResults.set(i, "Ваши результаты:");}
+            } else{
+                List<CountResult> countResults = resultRepository.findAllByQuestionValue(i);
+                for ( int j=0; j<countResults.size(); j++){
+                    CountResult countResult = countResults.get(j);
+                    if (resultsList.get(i)<=countResult.getMaxValue() && resultsList.get(i) >= countResult.getMinValue()){
+                        String level = countResult.getLevel();
+                        showResults.set(i,level);
+                    }
+                }
+            }
+        }
+        return showResults;
+
+    }
+
     public ArrayList<String> showResults (long testResult) {
+        List<String> description = Arrays.asList(new String[]{"0.",
+                "1.Ценности личностной гармонии  ЦГЛ : ",
+                "2.Ценности духовные : ",
+                "3.Образ жизни (его оптимальность) : ",
+                "4.Саморегуляция эмоций и др : ",
+                "5.Конструктивность общения : ",
+                "6.Самогармонизация личности : ",
+                "7.Умеренность силы желаний и достижений : ",
+                "8.Самостоятельность : ",
+                "9.Удовлетворённость жизнью и отношениями с людьми : ",
+                "10.Жизненное самоопределение : ",
+                "11.Жизненная самореализация : ",
+                "12.Позитивность самооценки : ",
+                "13.Интегральная гармоничность личности : ",
+                "14.Нравственные ценности : ",
+                "15.Эстетические ценности : ",
+                "16.Творчество : ",
+                "17.Реалистичность картины Мира : ",
+        });
         TestResultEntity testR = testResultRepo.getById(testResult);
         String stringResults = testR.getResults();
         List<Double> resultsList = stringToDoubleConverter(stringResults);
         TestEntity test = testR.getTest();
-        ArrayList<String> showResults = new ArrayList<>(Collections.nCopies(test.getCategoryCount()+1, null));
+        ArrayList<String> showResults = new ArrayList<>(Collections.nCopies(test.getCategoryCount(), null));
             for (int i = 0; i <= test.getCategoryCount(); i++) {
                 if (i == 0){
                     if (resultsList.get(i)>=4){
@@ -297,7 +361,7 @@ public class TestService {
                         CountResult countResult = countResults.get(j);
                         if (resultsList.get(i)<=countResult.getMaxValue() && resultsList.get(i) >= countResult.getMinValue()){
                             String level = countResult.getLevel();
-                            showResults.set(i,level);
+                            showResults.set(i,description.get(i)+level);
                         }
                     }
                 }
@@ -306,13 +370,15 @@ public class TestService {
         return showResults;
         }
 
-    public List<Double> getNewListOfDouble(List<Double> doubleArr) {
+    public List<Double> getNewListOfDouble(List<Double> doubleArr, int subsractSize) {
         Double sumElementsOfArray = 0.0;
-        for (int i = 0; i < doubleArr.size(); i++) {
+        for (int i = 1; i < subsractSize-1; i++) {
             sumElementsOfArray+= doubleArr.get(i);
         }
-        Double newElement = sumElementsOfArray/(doubleArr.size()-1);
-        doubleArr.add(newElement);
+
+        Double newElement = sumElementsOfArray/(subsractSize-2);
+        int category13th = doubleArr.indexOf(-1.0);
+        doubleArr.set(category13th, newElement);
         return doubleArr;
     }
 

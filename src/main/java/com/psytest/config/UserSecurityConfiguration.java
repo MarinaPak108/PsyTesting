@@ -30,7 +30,8 @@ public class UserSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/create").permitAll()
                 .anyRequest().authenticated()
                 .and().formLogin().loginPage("/login").permitAll()
-                .defaultSuccessUrl("/home")
+                .defaultSuccessUrl("/home").permitAll()
+                .failureForwardUrl("/errorlogin").permitAll()
                 .and().logout().permitAll();
 
         http.csrf().disable();

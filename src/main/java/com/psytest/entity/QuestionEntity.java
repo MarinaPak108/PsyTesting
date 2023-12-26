@@ -38,11 +38,27 @@ public class QuestionEntity {
     @Column(name = "chose", nullable = false)
     private Integer choose;
 
+    @Basic
+    @NotNull
+    @Column(name = "is_show", nullable = false)
+    private Integer isShow;
+
     public QuestionEntity(Long id, String question, Integer questionNumber, Integer questionValue) {
         this.id = id;
         this.question = question;
         this.questionNumber = questionNumber;
         this.questionValue = questionValue;
+    }
+
+    public QuestionEntity(Long id, String question, Integer questionNumber, Integer questionValue, TestEntity test, List<AnswerEntity> answerList, Integer choose, Integer isShow) {
+        this.id = id;
+        this.question = question;
+        this.questionNumber = questionNumber;
+        this.questionValue = questionValue;
+        this.test = test;
+        this.answerList = answerList;
+        this.choose = choose;
+        this.isShow = isShow;
     }
 
     public QuestionEntity() {
@@ -108,5 +124,13 @@ public class QuestionEntity {
 
     public void setChoose(Integer choose) {
         this.choose = choose;
+    }
+
+    public Integer getIsShow() {
+        return isShow;
+    }
+
+    public void setIsShow(Integer isShow) {
+        this.isShow = isShow;
     }
 }

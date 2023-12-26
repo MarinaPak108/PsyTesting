@@ -28,14 +28,15 @@ public class UserController {
         this.service = service;
     }
 
-    @GetMapping("/login")
+    @RequestMapping("/login")
     public String showLoginUserForm(Model model) {
         model.addAttribute("formData", new CreateUserLoginFormData());
         return "users/login";
     }
 
-    @GetMapping("/home")
+    @RequestMapping("/home")
     public String doLoginUser(Principal principal, RedirectAttributes atts) {
+
         String[] authCredentials = ((String) ((UsernamePasswordAuthenticationToken) principal).getPrincipal()).split("_");
 
 
@@ -61,10 +62,20 @@ public class UserController {
                         result = "redirect:/teacher";
                     }
                 }
+            else{
+                result = "redirect:/errorlogin";
+            }
         }
         return result;
     }
 
+    @RequestMapping("/errorlogin")
+    public String errorLogin(Model model){
+        model.addAttribute("errorLogin", "login failed. please check again or sign in");
+        model.addAttribute("formData", new CreateUserLoginFormData());
+        return "users/login";
+
+    }
     @GetMapping("/profile")
     public String profileUser(@RequestParam("login") String login, Model model) {
         byte[] decodedBytes = Base64.getDecoder().decode(login);
